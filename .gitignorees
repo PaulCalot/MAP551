@@ -1,6 +1,0 @@
-.ipynb_checkpoints
-*/.ipynb_checkpoints/*
-jupyterhub.sqlite
-jupyterhub_cookie_secret
-__pycache__/
-lib/
