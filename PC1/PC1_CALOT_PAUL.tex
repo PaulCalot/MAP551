@@ -2,6 +2,10 @@
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
+
+\usepackage{pgfplots} % pour plot des graphs sous laTex
+
+
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
@@ -9,9 +13,10 @@
 \author{Paul Calot}
 \title{MAP551 - PC 1 - Théorie de l’explosion thermique}
 \begin{document}
+
 \maketitle
 
-\chapter{PC 1 - Théorie de l'explosion thermique}
+%\chapter{Théorie de l'explosion thermique}
 
 \section{Astuces}
 
@@ -22,6 +27,52 @@
 \end{itemize}
 
 \section{Modèle simplifié 1 - explosion adiabatique}
+
+\subsection{2.1.1}
+
+\subsubsection{2.1.1.a}
+
+En posant : $ H = T_r Y + T $ on obtient $d_tH = T_r \space d_tY+d_tT = 0$. 
+
+Par conséquent:  $$\forall t \geq 0, \space H(t) = cte = H(0) = T_r Y(0) + T(0) = Tr + T_0 = T_b $$
+
+Donc : $$\forall t \geq 0, \space H(t) = T_b$$
+
+Puis, on a $T= H-T_rY$ d'où : 
+$$ d_tY = -B e^{-\frac{E}{RT}Y} = -B e^{-\frac{E}{R(T_b-T_rY)}} Y = \Phi(Y)$$
+
+On a également $Y= \frac{T_b-T}{T_r}$ donc : 
+$$ d_tT = T_r \space B e^{-\frac{E}{RT}} (\frac{T_b-T}{T_r}) = B \space (T_b-T) e^{-\frac{E}{RT}}  = \Lambda(T)$$
+
+\subsubsection{2.1.1.b}
+
+On remarque que : $$ d_tT > 0 \Leftrightarrow T_b > T $$ car $B>0$ et la fonction exponentielle est toujours scrictement positive. Et $T_b = T \Leftrightarrow d_t T = 0$.
+
+De plus et par hypothèse, $T_r > 0$ donc $T_b > T(0)$ donc $d_t T(0) > 0$. Donc $T$ est strictement croissante tant qu'elle est inférieure à $T_b$. Lorsque $T = T_b$, $d_t T = 0$ et donc $T$ n'évolue plus. Par conséquent, $T_b$ est une borne supérieure de $T$ pour une condition initiale $T(0) < T_b$ que $T$ atteindra, au pire, en un temps infini.
+
+Donc, 
+$$\lim_{t \rightarrow \infty} Y = \lim_{t \rightarrow \infty} \frac{T_b-T}{T_r} = 0 $$
+
+\subsubsection{2.1.1.c}
+
+On a $Y= \frac{T_b-T}{T_r}$, donc :
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = $T$,
+    ylabel = {$Y$},
+]
+%Below the red parabola is defined
+\addplot [
+    domain=400:3000, 
+    samples=1000, 
+    color=red,
+]
+{(3000-x)/(2600)};
+
+\end{axis}
+\end{tikzpicture}
 
 
 \section{Modèle simplifié 2 - explosion avec prise en compte des pertes thermiques}
