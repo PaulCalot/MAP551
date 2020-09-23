@@ -2,14 +2,16 @@
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
-
-\usepackage{pgfplots} % pour plot des graphs sous laTex
-
+	
+\usepackage{float}
 
 \usepackage{amsmath}
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage[left=1cm,right=1cm,top=1cm,bottom=1cm]{geometry}
+
+\usepackage{pgfplots} % pour plot des graphs sous laTex
+
 \author{Paul Calot}
 \title{MAP551 - PC 1 - Théorie de l’explosion thermique}
 \begin{document}
@@ -70,6 +72,136 @@ On a $Y= \frac{T_b-T}{T_r}$, donc :
     color=red,
 ]
 {(3000-x)/(2600)};
+
+\end{axis}
+\end{tikzpicture}
+
+\subsubsection{2.1.1.d}
+
+Traçons quelques graphs pour commencer : 
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = $T$,
+    ylabel = {$\frac{\Lambda(T)}{\Lambda_{max}}$},
+    legend pos=north west,
+]
+%Below the red parabola is defined
+\addplot [
+    domain=0:3000, 
+    samples=1000, 
+    color=red,
+]
+{(3000.0-x)*e^(-12000.0/x))/4.1172782209038985};
+\addlegendentry{$\beta = 40$}
+
+\addplot [
+    domain=0:3000, 
+    samples=1000, 
+    color=blue,
+]
+{(3000.0-x)*e^(-40000.0/x))/0.00012499436381930621};
+\addlegendentry{$\beta = 100$}
+\end{axis}
+\end{tikzpicture}
+
+On a : 
+
+\begin{table}[H]
+	\begin{center}
+	\begin{tabular}{|c|c|c|}
+ 		\hline
+ 		T (K) | $\beta$ & 30 & 100 \\ 
+ 		\hline
+ 		1000 & 3.0e-3 & $\approx$ 0 \\ 
+ 		\hline
+ 		2400 & 0.98 & 0.28  \\
+ 		\hline
+	\end{tabular}
+	\end{center}
+ \caption{Valeur de $\Lambda(T)$ pour certaines valeurs de $T$ et de $\beta$.}
+\end{table}
+
+
+"Forte non linéarité dépendant de l'énergie d'activation" : plus $E_a$ augmente, plus $\beta$ augmente et plus $\Lambda$ augmente.
+Cependant cette augmentation n'est pas proportionnelle à  l'augmentation de $\beta$ à température égale.
+
+\subsection{2.1.2}
+\subsubsection{2.1.2.a}
+
+On a : $ dt\Theta = dtT \frac{1}{T_{FK}}  = \frac{\Lambda(T)}{T_{FK}}$
+
+Puis en utilisant $ T = T_{FK} \Theta + T_0 $, on obtient :
+
+	$$ dt\Theta = B(T_r - T_{FK} \Theta)e^{-\frac{E}{R(T_{FK}\Theta+T_0}} $$
+	
+\subsubsection{2.1.2.b}
+
+Sous les hypothèses (H0) et (H1) ainsi que celle de cette question, on a :
+\begin{enumerate}
+	\item $T_r - T_{FK} \Theta = T_r - \frac{T_0\Theta}{\beta} = T_r*(1 + o(1))$ car $\Theta << \beta$ et par (H2).
+	\item $\frac{E}{R(T_{FK}\Theta+T_0} = \frac{E}{RT_0(1+\frac{\Theta}{\beta}} = \frac{E}{RT_0} (1-\frac{\Theta}{\beta} + o(\frac{\Theta}{\beta}) $ 
+\end{enumerate} 
+
+D'où : 
+
+$$ d_t\Theta = BT_r(1+o(1))e^{-\frac{E}{RT_0}(1-\frac{\Theta}{\beta} + o(\frac{\Theta}{\beta})} \approx B T_r e^{-\frac{E}{RT_0}} e^{\Theta} = \frac{1}{t_I}e^{\Theta} $$
+avec $t_I = \frac{1}{B(T_b-T_0)e^{\frac{E}{RT_0}}}$.
+
+En repassant en coordonnées non adimensionnée, on obtient : $e^{\Theta} = e^{\frac{T-T_0}{T_{FK}}}$ qui est donc la fonction exponentielle appliquée à une forme linéaire de $T$. Partant de $T$ qui était au dénominateur de la fraction dans l'exponentielle, on comprendre l'appellation “linéarisation de Frank-Kamenetskii”.
+
+\subsubsection{2.1.2.c}
+
+Notons que : $\tau = \frac{t}{t_I} \Rightarrow d\tau = \frac{dt}{t_I} $.
+
+En utilisant (5) et le changement de variable $\tau = \frac{t}{t_I}$, on obtient : 
+
+$$ d_{\tau}\tilde{\theta}(\tau) = t_I d_{t}\tilde{\Theta}(t) = e^{\tilde{\Theta}(t)} = e^{\tilde{\theta}(\tau)} $$
+
+Afin de résoudre cette équation, commençons par séparer les variables : 
+
+$ d_{\tau}\tilde{\theta}(\tau) = e^{\tilde{\theta}(\tau)} \Leftrightarrow \frac{d\tilde{\theta}(\tau)}{e^{\tilde{\theta}(\tau)} } = d\tau $
+
+Pour résoudre cela, il suffit de remarquer que :
+
+$ \frac{u'}{e^u} = \frac{u'}{e^{-u}} = - d(e^{-u})$
+
+Ce qui dans notre cas, permet d'écrire :
+
+$ d_{\tau}\tilde{\theta}(\tau) = e^{\tilde{\theta}(\tau)} \Leftrightarrow  - (e^{-\tilde{\theta}(\tau)} - 1) = t $ par intégration entre $0$ et $t$ avec $\tilde{\theta}(0) = 0$.
+
+Ce qui donne dans le cas $\tilde{\theta}(\tau) > 0$ (ce qui est toujours vrai donc on garde l'équivalence):  
+
+$$\tilde{\theta}(\tau) = - ln(1-\tau)$$
+
+Graphiquement, cela donne :
+
+
+\begin{tikzpicture}
+\begin{axis}[
+    axis lines = left,
+    xlabel = {$\tau = \frac{t}{t_I}$},
+    ylabel = {$\tilde{\theta}(\tau)$},
+    legend pos=north west,
+]
+%Below the red parabola is defined
+\addplot [
+    domain=0:1.1, 
+    samples=100, 
+    color=blue,
+]
+{-log10(1-x)/log10(e)};
+\addlegendentry{$\tilde{\theta}(\tau) = - ln(1-\tau)$}
+
+
+\addplot [
+    domain=0:0.1, 
+    samples=100, 
+    color=green,
+]
+{1*x};
+\addlegendentry{$y = x$ (tangente à l'origine)}
 
 \end{axis}
 \end{tikzpicture}
