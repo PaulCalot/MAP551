@@ -1,8 +1,11 @@
-\documentclass[10pt,a4paper,twocolumn]{article}
+\documentclass[10pt,a4paper,twocolumn]{report}
+
+
+
 \usepackage[utf8]{inputenc}
 \usepackage[francais]{babel}
 \usepackage[T1]{fontenc}
-	
+
 \usepackage{float}
 
 \usepackage{amsmath}
@@ -12,15 +15,26 @@
 
 \usepackage{pgfplots} % pour plot des graphs sous laTex
 
+\usepackage{subfigure}
+\usepackage{graphics}
+
+\usepackage{tkz-tab}
+
+
+\setcounter{tocdepth}{3}
+\setcounter{secnumdepth}{3}
+\renewcommand{\thesubsubsection}{\thesubsection.\alph{subsubsection}}
+
+
 \author{Paul Calot}
 \title{MAP551 - PC 1 - Théorie de l’explosion thermique}
 \begin{document}
 
 \maketitle
 
-%\chapter{Théorie de l'explosion thermique}
 
-\section{Astuces}
+\chapter{Introduction}
+%\section{Astuces}
 
 \begin{itemize}
  \item Regarder que la solution est physiquement possible (température évolue dans le bon sens, bonne condition initiale etc.) -> attention peut être plus compliqué qu'il n'y paraît;
@@ -28,11 +42,14 @@
  \item Tracer plan de phase (vitesse en fonction de la position, fuel en fonction de la température) => l'évolution des différentes grandeurs.
 \end{itemize}
 
+\chapter{Explosion dans un réacteur homogène}
+
 \section{Modèle simplifié 1 - explosion adiabatique}
 
-\subsection{2.1.1}
+\subsection{ }
 
-\subsubsection{2.1.1.a}
+\subsubsection{} 
+% 2.1.1.a
 
 En posant : $ H = T_r Y + T $ on obtient $d_tH = T_r \space d_tY+d_tT = 0$. 
 
@@ -46,7 +63,7 @@ $$ d_tY = -B e^{-\frac{E}{RT}Y} = -B e^{-\frac{E}{R(T_b-T_rY)}} Y = \Phi(Y)$$
 On a également $Y= \frac{T_b-T}{T_r}$ donc : 
 $$ d_tT = T_r \space B e^{-\frac{E}{RT}} (\frac{T_b-T}{T_r}) = B \space (T_b-T) e^{-\frac{E}{RT}}  = \Lambda(T)$$
 
-\subsubsection{2.1.1.b}
+\subsubsection{} % 2.1.1.b
 
 On remarque que : $$ d_tT > 0 \Leftrightarrow T_b > T $$ car $B>0$ et la fonction exponentielle est toujours scrictement positive. Et $T_b = T \Leftrightarrow d_t T = 0$.
 
@@ -55,7 +72,7 @@ De plus et par hypothèse, $T_r > 0$ donc $T_b > T(0)$ donc $d_t T(0) > 0$. Donc
 Donc, 
 $$\lim_{t \rightarrow \infty} Y = \lim_{t \rightarrow \infty} \frac{T_b-T}{T_r} = 0 $$
 
-\subsubsection{2.1.1.c}
+\subsubsection{} % 2.1.1.c
 
 On a $Y= \frac{T_b-T}{T_r}$, donc :
 
@@ -76,7 +93,7 @@ On a $Y= \frac{T_b-T}{T_r}$, donc :
 \end{axis}
 \end{tikzpicture}
 
-\subsubsection{2.1.1.d}
+\subsubsection{}%2.1.1.d
 
 Traçons quelques graphs pour commencer : 
 
@@ -127,31 +144,31 @@ On a :
 "Forte non linéarité dépendant de l'énergie d'activation" : plus $E_a$ augmente, plus $\beta$ augmente et plus $\Lambda$ augmente.
 Cependant cette augmentation n'est pas proportionnelle à  l'augmentation de $\beta$ à température égale.
 
-\subsection{2.1.2}
-\subsubsection{2.1.2.a}
+\subsection{} % 2.1.2
+\subsubsection{} % 2.1.2.a
 
-On a : $ dt\Theta = dtT \frac{1}{T_{FK}}  = \frac{\Lambda(T)}{T_{FK}}$
+On a : $ d_t\Theta = d_tT \frac{1}{T_{FK}}  = \frac{\Lambda(T)}{T_{FK}}$
 
 Puis en utilisant $ T = T_{FK} \Theta + T_0 $, on obtient :
 
-	$$ dt\Theta = B(T_r - T_{FK} \Theta)e^{-\frac{E}{R(T_{FK}\Theta+T_0}} $$
+	$$ d_t\Theta = B(T_r - T_{FK} \Theta)e^{-\frac{E}{R(T_{FK}\Theta+T_0}} $$
 	
-\subsubsection{2.1.2.b}
+\subsubsection{} % 2.1.2.b
 
 Sous les hypothèses (H0) et (H1) ainsi que celle de cette question, on a :
 \begin{enumerate}
-	\item $T_r - T_{FK} \Theta = T_r - \frac{T_0\Theta}{\beta} = T_r*(1 + o(1))$ car $\Theta << \beta$ et par (H2).
-	\item $\frac{E}{R(T_{FK}\Theta+T_0} = \frac{E}{RT_0(1+\frac{\Theta}{\beta}} = \frac{E}{RT_0} (1-\frac{\Theta}{\beta} + o(\frac{\Theta}{\beta}) $ 
+	\item $T_r - T_{FK} \Theta = T_r - \frac{T_0\Theta}{\beta} = T_r(1 + o(1))$ car $\Theta << \beta$ et par (H2).
+	\item $\frac{E}{R(T_{FK}\Theta+T_0)} = \frac{E}{RT_0(1+\frac{\Theta}{\beta})} = \frac{E}{RT_0} (1-\frac{\Theta}{\beta} + o(\frac{\Theta}{\beta}) $ 
 \end{enumerate} 
 
 D'où : 
 
-$$ d_t\Theta = BT_r(1+o(1))e^{-\frac{E}{RT_0}(1-\frac{\Theta}{\beta} + o(\frac{\Theta}{\beta})} \approx B T_r e^{-\frac{E}{RT_0}} e^{\Theta} = \frac{1}{t_I}e^{\Theta} $$
-avec $t_I = \frac{1}{B(T_b-T_0)e^{\frac{E}{RT_0}}}$.
+$$ d_t\Theta = \frac{BT_r}{T_{FK}}(1+o(1))e^{-\frac{E}{RT_0}(1-\frac{\Theta}{\beta} + o(\frac{\Theta}{\beta})} \approx \frac{BT_r}{T_{FK}} e^{-\frac{E}{RT_0}} e^{\Theta} = \frac{1}{t_I}e^{\Theta} $$
+avec $t_I = \frac{T_{FK}}{B(T_b-T_0)e^{\frac{E}{RT_0}}} = \frac{T_{FK}e^{\beta}}{B\bar{T_r}} $.
 
 En repassant en coordonnées non adimensionnée, on obtient : $e^{\Theta} = e^{\frac{T-T_0}{T_{FK}}}$ qui est donc la fonction exponentielle appliquée à une forme linéaire de $T$. Partant de $T$ qui était au dénominateur de la fraction dans l'exponentielle, on comprendre l'appellation “linéarisation de Frank-Kamenetskii”.
 
-\subsubsection{2.1.2.c}
+\subsubsection{} % 2.1.2.c
 
 Notons que : $\tau = \frac{t}{t_I} \Rightarrow d\tau = \frac{dt}{t_I} $.
 
@@ -210,6 +227,210 @@ Graphiquement, cela donne :
 \section{Modèle simplifié 2 - explosion avec prise en compte des pertes thermiques}
 
 On suppose que la température reste homogène et que la température des parois sont constantes (terme physique).
+
+\subsection{}% 2.2.1
+
+\subsubsection{} % 2.2.1.a
+
+\paragraph{Minoration de T}
+Supposons qu'il existe $\bar{t}$ tel que $\bar{t} = inf\{t>0, T(t) = T_0\}$.
+
+Dans ce cas, on aurait $d_tT(\bar{t}) = T_rB e^{-\frac{E}{RT}}Y > 0$ car $Y(\bar{t}) \neq 0$. Ce qui voudrait dire que dans un voisinage de $\bar{t}$, $dt_T(t) \geq 0$ et que donc :
+$\exists \tilde{t} < \bar{t}, T(t) \leq T_0$ ce qui par définition de $\bar{t}$ est exclu. 
+
+D'où il n'existe pas de moment $t>0$ tel que $T(t) = T_0$ et donc : $\forall t >0, T(t)>T_0$.
+
+\paragraph{Etude de $H$}
+
+Si on pose : $H = T_r Y + T$ alors $d_tH(t) = -\frac{T-T_0}{t_p} < 0, \forall t>0$ par la démonstration précédente. Par conséquent, $H$ n'est plus constant. De plus, $H$ diminue, donc: $\forall t > 0, \space H(t)< H(t=0) = T_b$ d'après la partie précédente.
+
+\paragraph{Majoration de T}
+
+Par ce qui précède, on a immédiatement : $\forall t > 0, \space T(t) < T_r Y(t)+T(t) = H(t) < T_b$.
+De plus, comme $T(0) = T_0 < T_b$, alors : 
+$$ \forall t \geq 0, \space T(t) < T_b $$
+
+\paragraph{Conjecture sur le comportement du système}
+
+Initialement, $d_tT(t) \approx T_rBe^{\frac{-E}{RT}}Y$ car $T$ est très proche de $T_0$.
+Par conséquent on retrouve le comportement explosif de la partie précédente. Cependant, dès lorsque $T-T_0>K$ où $K < T_r$ (car $T<T_b$) est la différence de température telle que le second terme de (8) domine le premier terme, on récupère : $dt_T = -\frac{T-T_0}{t_p} < 0$, ce qui a pour conséquence de diminuer à la température et d'empêcher l'explosion de la température. Pendant ce temps, on a toujours $d_tY(t) < 0$ et donc $Y$ diminue. Donc plus le temps passe plus le premier terme va diminuer indépendemment de $T$, avec une fois $Y\approx0$, $d_tT < 0$ jusqu'à ce que $T=T_0$. Un comportement oscillatoire amorti (avec convergence vers $T_0$ avec $T>T_0$) semble possible mais dépendra probablement des constantes utilisées.
+
+\subsubsection{}
+
+On peut imaginer les formes de $Y(t)$ et $T(t)$ visiblent en figure \ref{comportement_syst_2}.
+
+\begin{figure}
+	\centering
+	\centering
+	\begin{tikzpicture}
+	\begin{axis}[
+		title={Température en fonction du temps},
+    	axis lines = left,
+    	xlabel = {$t$},
+    	ylabel = {$T(t)$},
+    	ymin = 0,
+    	yticklabels={0,.,.,400},
+    	xticklabels={,,},
+    	legend pos=north west,
+	]
+	\addplot [
+    	domain=0:0.5, 
+    	samples=100, 
+    	color=blue,
+	]
+	{400+1000*(e^(x)-1)};
+	
+	\addplot [
+    	domain=0.5:1.55, 
+    	samples=100, 
+    	color=blue,
+	]
+	{400+1000*(e^(0.5)-1)-400*x*(x-0.5)};
+	
+	\end{axis}
+	\end{tikzpicture}
+	
+	\begin{tikzpicture}
+	\begin{axis}[
+		title={Fraction massique en fonction du temps},
+    	axis lines = left,
+    	xlabel = {$t$},
+    	ylabel = {$Y(t)$},
+    	xticklabels={,,},
+    	legend pos=north west,
+	]
+	\addplot [
+    	domain=0:2, 
+    	samples=100, 
+    	color=blue,
+	]
+	{e^(-4*x)};
+
+	\end{axis}
+	\end{tikzpicture}
+	
+	\caption{Forme de $Y$ et $T$ en fonction du temps. En pratique bien sûr, la température est $C^1$.}
+	\end{figure} \label{comportement_syst_2}
+
+
+	\paragraph{Adimensionnement de $Y$ et $T$}
+	
+	On commence par poser : $\Theta = \frac{T-T_0}{T_{FK}} \Rightarrow d_t T = T_{FK} d_t\Theta$.
+	
+	On a alors : $$(8) \Leftrightarrow d_t\Theta = B\frac{T_r}{T_{FK}}e^{-\frac{E}{R(T_{FK}\Theta+T_0)}}Y - \frac{\Theta}{t_p} $$
+	
+	Puis on pose : $ \tau = \frac{t}{t_I} \Rightarrow d\tau = \frac{dt}{t_I}$
+	
+	Et également : $ \tilde{Y}(\tau) = Y(t)$ et $ \tilde{\Theta}(\tau) = \Theta(t)$
+	
+	D'où : 
+	
+	$$(8) \Leftrightarrow  d_\tau\tilde{\Theta} = Bt_I\frac{T_r}{T_{FK}}e^{-\frac{E}{R(T_{FK}\tilde{\Theta}+T_0)}}\tilde{Y} - t_I \frac{\tilde{\Theta}}{t_p} $$
+	
+	Et également : $$(7) \Leftrightarrow d_\tau\tilde{Y} = -t_IBe^{-\frac{E}{R(T_{FK}\tilde{\Theta}+T_0)}}\tilde{Y}$$
+	
+	\subsection{} %2.2.2
+		
+	\subsubsection{}%2.2.2.a
+	On a : 
+	$$ d_\tau\tilde{\Theta} = Bt_I\frac{T_r}{T_{FK}}e^{-\frac{E}{R(T_{FK}\tilde{\Theta}+T_0)}}\tilde{Y} - t_I \frac{\tilde{\Theta}}{t_p} = k_1 e^{-\frac{\beta}{\beta^{-1}\tilde{\Theta}+1)}}\tilde{Y} - k_2 \tilde{\Theta}$$
+	
+	Or :
+	$ -\frac{\beta}{\beta^{-1}\tilde{\Theta}+1)} = \Theta - 1 + o(\frac{\Theta}{\beta})$ car on a montré que $T<T_b$, donc on peut supposer que $\tilde{\Theta} << \beta$ avec par (H1) : $\beta >> 1$. Il faudra vérifier sur quel intervale cette hypothèse tient.
+	
+	En faisant cela, on se ramène donc à une situation analogue au modèle 1) du point de vue des calculs et on obtient :
+	
+	$ d_\tau\tilde{\Theta} \approx k e^{\tilde{\Theta}}\tilde{Y} - k_2 \tilde{\Theta} $ 
+	
+	où $ k = k_1 e^{-\beta} = Bt_I \frac{T_r}{T_{FK}} e e^{-\beta} = 1$ car on avait posé : $t_I = \frac{T_{FK}e^{\beta}}{T_rB}$.
+	
+	Par l'hypothèse (H2) d'une grande enthalpie de réaction, on a que $\tilde{Y}$ sera relativement constant jusqu'à ce qu'on dépasse une certaine température élevé devant $T_0$. Cela revient à supposer que pour l'intervale que l'on étudie, on a $\tilde{Y} \approx 1$.
+	
+	Finalement et en posant $\tilde{\Theta} = \tilde{\theta}$, on obtient :
+	
+	$$ d_\tau\tilde{\theta} = e^{\tilde{\theta}} - \alpha_0 \tilde{\theta} $$ 
+	
+	où $\alpha_0 = \frac{t_I}{t_p}$ et sur un intervale de "pas trop grande température" que l'on devra qualifier par la suite.
+	
+	\paragraph{Intervale temporel de validité}
+	
+	Plusieurs paramètres sont à l'oeuvre pour la validité du modèle. Notamment, $\tilde{\Theta} << \beta $ ce qui implique qu'on ne doit pas avoir d'explosion en température. Plus $\alpha_0$ est élevé et plus les pertes thermiques limiteront cette divergence et donc plus longtemps sera valide le modèle.
+	Une forte contrainte est également appliquée à $\tilde{Y}$ qui doit demeurer quasiment constante.
+	
+	En utilisant le notebook et notamment la cellule du modèle de l'explosion avec prise en compte des pertes thermiques et consommation de combustible (cf. figure \ref{fig:comportement_model_alpha}), on a :
+	
+	\begin{enumerate}
+		\item $\alpha_0 = 0$ : on retrouve le comportement du modèle précédent puisqu'on ignore les pertes thermiques. Pour ce modèle, on peut considérer que l'approximation que l'on fait est valable sur l'intervale [0,1] sec (avant l'explosion en température).
+		\item $\alpha_0 = 0.1$ : on constate cette fois une décroissance de la température à partir d'un certain temps (lorsque $Y \approx 0$). Pour ce modèle, on peut considérer également que l'approximation que l'on fait est valable sur l'intervale [0,1] sec.
+		\item $\alpha_0 = 2.4$ :  Pour ce modèle, on peut considérer que l'approximation que l'on fait est valable sur l'intervale [0,7] sec. En effet, les pertes thermiques retardent vraiment la montée en température qui invalide le modèle et permet ainsi de limiter l'énergie disponible pour l'accélération de la cinétique de la réaction. Ainsi, $Y$ décroit lentement sur l'intervale [0,7] sec. Au bout de sept secondes, $Y$ a environ perdu $10 \%$ de sa valeur initiale (si on fixe une tolérance à $10 \%$ qui me semble bien trop élevée pour une réaction de combustion dans un réacteur cependant).
+		\item $\alpha_0 = 2.5$ : on semble ici avoir passé un palier sur $\alpha_0$ puisque la température semble rester égale à sa valeur initiale (aucun pic n'est visible contrairement à précédemment). Physiquement, toute l'énergie produite par la réaction est quasi-immédiatement dégagée via les pertes thermiques empêchant ainsi tout effet d'emballement de la réaction. Cependant, $Y$ décroit plus rapidement que précédemment (je n'explique pas ce phénomène) [REVOIR CELA].
+	\end{enumerate}
+	
+	Notons que $\beta = 30.0$ a été utilisé pour tracer cela. Un $\beta$ plus grand permet d'augmenter $T_{max-valid}$.
+	
+	\begin{figure*}
+		\centering
+		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/0_.png}
+    	\end{subfigure}
+		\centering  	
+   		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/0_1.png}
+    	\end{subfigure}
+    	\centering   		
+
+   		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/2_4.png}
+    	\end{subfigure}
+    	\centering   		
+   		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/2_5.png}
+    	\end{subfigure}
+   	\caption{Comportement du modèle (7)-(8) pour différentes valeurs de $\alpha_0$, respectivement : 0, 0.1, 2.4 et 2.5. Ces valeurs ont été choisies car une modification de comportement se faisait voir.}
+    \label{fig:comportement_model_alpha}
+	\end{figure*}
+	
+	\subsubsection{} %2.2.2b
+
+	Ce diagramme est disponible sur le notebook et permet de tracer le tableau suivant :
+
+	[TODO : ajouter les calculs]
+	
+	\begin{figure*}
+	\begin{tikzpicture}
+   		\tkzTabInit{$\tilde{\theta}_0$ / 1 , $\alpha_0 < \alpha_{cr}$ / 1,  $\alpha_0 = \alpha_{cr}$ / 1, $\alpha_0 > \alpha_{cr}$ / 1}{$0$, $\tilde{\theta_l}$, $\tilde{\theta_r}$, $+\infty$}
+   		\tkzTabLine{d,h,d,h,d,h,d}
+   		\tkzTabLine{,\text{CV vers },\text{$\tilde{\theta_l}$=$\tilde{\theta_r}$},\text{(instable)},d,h,d}
+   		\tkzTabLine{,\text{CV vers },\text{$\tilde{\theta_l}$=$\tilde{\theta_r}$},\text{(stable)},d,h,d}
+	\end{tikzpicture}
+	\caption{Comportement }
+	\end{figure*}
+	
+	Avec $\alpha_{cr} \approx 2.72$ d'après les graphs.
+	
+	Physiquement, on a :
+	\begin{enumerate}
+		\item $\alpha_0 < \alpha_{cr}$ : les pertes thermiques ne sont pas suffisantes pour empêcher l'emballement de la réaction et l'explosion de la température.
+		\item $\alpha_0 = \alpha_{cr}$ : les pertes thermiques sont tout juste suffisantes pour empêcher l'emballement de la réaction mais le moindre apport d'énergie extérieur fait exploser la température (équilibre instable). Si $T_0$ est trop important cependant, il y a divergence.
+		\item $\alpha_0 > \alpha_{cr}$ : les pertes thermiques sont suffisamment importantes pour empêcher l'emballement de la réaction et avoir un équilibre stable si la température initiale est suffisamment faible. Si tel n'est pas le cas, on peut avoir une convergence vers un équilibre instable ou une explosion.
+	\end{enumerate}
+	
+	\subsubsection{} %2.2.2c
+	Les dynamiques possibles pour l'équation (9) sont détaillés dans la question précédente. Concernant les comportements limites : 
+	\begin{enumerate}
+		\item $\alpha_0 \rightarrow 0$ : on retrouve le cas adiabatique de la partie précédente.
+		\item $\alpha_0 \rightarrow + \infty$ : dans ce cas, la position d'équilibre stable est de plus en plus proche de $\tilde{\theta}_0 = 0$ et la position d'équilibre instable devient très très grande.
+	\end{enumerate}	
+	
+
+	\subsubsection{} %2.2.2.d
+	Il y a trois possibilités : 
+	\begin{enumerate}
+		\item Lorsque $\alpha_0 < \alpha_{cr}$,  il n'y a pas de point stationnaire.
+		\item Lorsque $\alpha_0 = \alpha_{cr}$,  il n'y a un point stationnaire qui est instable.
+		\item Lorsque $\alpha_0 > \alpha_{cr}$,  il y a pas deux points stationnaires $\tilde{\theta}_l$ et $\tilde{\theta}_r$ avec $\tilde{\theta}_l < \tilde{\theta}_r$. Dans ce cas, le premier est stable et le second instable.
+	\end{enumerate}
+
 
 \section{Modèle simplifié 3 - explosion avec prise en compte de la convection}
 On commence à regarder la possibilité d'avoir une échelle spatiale.

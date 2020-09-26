@@ -5,7 +5,11 @@ jupyterhub_cookie_secret
 __pycache__/
 lib/
 nohup.out
+*.png
 # latex ignore
+*.tex
+*.bib
+# 2 previous are personnal (I only want the pdf to be uploaded).
 *.aux
 *.glo
 *.idx
