@@ -49,6 +49,22 @@ class second_bis_fk_model(object) :
         Y_dot     = (-1./Tr) * np.exp(theta) * Y
         return (theta_dot, Y_dot)
 
+    
+    
+class second_bis_fk_model_2(object) :
+
+    def __init__(self, alpha, Tr) :
+        self.alpha = alpha
+        self.Tr = Tr
+
+    def fcn(self, t, y) :
+        theta, Y = y
+        alpha = self.alpha
+        Tr = self.Tr
+        theta_dot = np.exp(theta) - alpha*theta # deleted Y to suit our solution (for Y ~ cte)
+        Y_dot     = (-1./Tr) * np.exp(theta) * Y
+        return (theta_dot, Y_dot)
+    
 class third_model(object) :
 
     def __init__(self, alpha0, mu, a, thetac) :

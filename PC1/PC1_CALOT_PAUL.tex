@@ -3,7 +3,7 @@
 
 
 \usepackage[utf8]{inputenc}
-\usepackage[francais]{babel}
+\usepackage[francais]{babel}	
 \usepackage[T1]{fontenc}
 
 \usepackage{float}
@@ -397,6 +397,7 @@ On peut imaginer les formes de $Y(t)$ et $T(t)$ visiblent en figure \ref{comport
 	[TODO : ajouter les calculs]
 	
 	\begin{figure*}
+	\centering
 	\begin{tikzpicture}
    		\tkzTabInit{$\tilde{\theta}_0$ / 1 , $\alpha_0 < \alpha_{cr}$ / 1,  $\alpha_0 = \alpha_{cr}$ / 1, $\alpha_0 > \alpha_{cr}$ / 1}{$0$, $\tilde{\theta_l}$, $\tilde{\theta_r}$, $+\infty$}
    		\tkzTabLine{d,h,d,h,d,h,d}
@@ -404,6 +405,7 @@ On peut imaginer les formes de $Y(t)$ et $T(t)$ visiblent en figure \ref{comport
    		\tkzTabLine{,\text{CV vers },\text{$\tilde{\theta_l}$=$\tilde{\theta_r}$},\text{(stable)},d,h,d}
 	\end{tikzpicture}
 	\caption{Comportement }
+	\label{fig:tableau de signe}
 	\end{figure*}
 	
 	Avec $\alpha_{cr} \approx 2.72$ d'après les graphs.
@@ -433,6 +435,90 @@ On peut imaginer les formes de $Y(t)$ et $T(t)$ visiblent en figure \ref{comport
 
 
 \section{Modèle simplifié 3 - explosion avec prise en compte de la convection}
-On commence à regarder la possibilité d'avoir une échelle spatiale.
+
+\subsection{} %2.3.1
+
+Quand $\Psi = 0$, on retrouve : 
+$$ d_\tau\tilde{\theta} = e^{\tilde{\theta}} - \alpha_0 \tilde{\theta} $$
+soit (9), soit le modèle où l'on a $Y \approx Y(0)$ et une température homogène dans le réacteur et donc aucun phénomène convectif.
+
+\subsection{} %2.3.2
+
+On avait déterminé un $\alpha_{cr} \approx 2.72$ dans la partie précédente. On prend donc ici : $\alpha_0 = 3.0$ afin de ne prendre aucun risque. \\
+
+On a également sélectionné différents $\tilde{\theta}_0$ puisqu'on avait vu que la convergence / divergence du système dépendait de cette condition initiale (cf. figure \ref{fig:tableau de signe}). On voit sur la comparaison entre $e^{\theta}$ et $q^{-}(\theta)$ que $\tilde{\theta}_{cr} \approx 1.5$.  
+
+Ainsi, la figure \ref{fig:comportement_selon_convection_inf} présente la comparaison des deux modélisation pour $1.4 = \tilde{\theta}_0 < \tilde{\theta}_{cr} \approx 1.5$. La figure \ref{fig:comportement_selon_convection_sup} présente la comparaison des deux modélisation pour $1.6 = \tilde{\theta}_0 \geq \tilde{\theta}_{cr}$. A gauche sur la figure est la modélisation sans convection et à droite avec convection. 
+
+\begin{figure*}
+		\centering
+		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/with_conv_inf.png}
+    	\end{subfigure}
+		\centering  	
+   		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/without_conv_inf.png}
+    	\end{subfigure}
+   	\caption{Comportement des modèles (9) (à gauche) et (11) (à droite) pour $\alpha_0 = 3.0$ et $1.4 = \tilde{\theta}_0$ < $\tilde{\theta}_{cr}$}
+    \label{fig:comportement_selon_convection_inf}
+	\end{figure*}
+
+\begin{figure*}
+		\centering
+		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/with_conv_sup.png}
+    	\end{subfigure}
+		\centering  	
+   		\begin{subfigure}{}
+        	\includegraphics[width=8cm]{screen_capture_notebook/without_conv_sup.png}
+    	\end{subfigure}
+   	\caption{Comportement des modèles (9) (à gauche) et (11) (à droite) pour $\alpha_0 = 3.0$ et $1.6 = \tilde{\theta}_0 \geq \tilde{\theta}_{cr}$}
+    \label{fig:comportement_selon_convection_sup}
+	\end{figure*}
+	
+On remarque immédiatement que la présence de la convection n'a aucune incidence lorsque la dissipation thermique au bord est suffisemment importante ($\alpha_0 = 3.0 > \alpha_{cr} \approx 2.72$) et que $\tilde{\theta}_0$ est suffisamment faible. 
+
+Cependant, lorsque  $\tilde{\theta}_0 \geq \tilde{\theta}_{cr}$, alors on distingue une différence de comportement. En effet, alors que le modèle (9) explose (comme nous l'avons étudié précédemment), on voit que le modèle (11) convergence vers la même valeurs que précédemment (environ $0.62$ ici) \textbf{avec $\theta_c = 1.030$}. En pratique, on doit attendre $tilde{\theta}_0 \approx 2.2874$ pour avoir une explosion du modèle (11). Avant cela, la température peut augmenter (jusqu'à $tilde{\theta}_0 \approx 3.2$ mais redescend toujours vers $0.62$.
+
+$\theta_c$ permet de jouer sur la divergence du système. En effet, à un $\alpha_0$ et $\tilde{\theta}_0$ fixés (disons à $3.0$ et $2.2874$), la diminution de $\theta_c$ entraîne la convergence du système. De même, l'augmenter pour $\tilde{\theta}_0 = 2.2873$ entraîne la divergence alors qu'on avait convergence dans le cas $\theta_c = 1.030$.
+
+La prise en compte de l'influence de la convection apporte donc de nouvelles informations puisqu'on peut maintenant se dire que $\tilde{\theta}_{cr}$ est maintenant plus élevé.
+
+\subsection{}%2.3.3
+
+Dans le cas $\Psi = 0$, on retrouve un contexte divergent du modèle (9) d'après le tableau \ref{fig:tableau de signe} puisque $\alpha_0 < \alpha_{cr}$.
+
+On obtient le comportement suivante pour le modèle (11)-(12) visible en figure \ref{fig:comportement_Q2.3.3} :
+
+\begin{figure*}
+		\centering
+		\begin{subfigure}{}
+        	\includegraphics[width=18cm]{screen_capture_notebook/Q233.png}
+    	\end{subfigure}
+		
+   	\caption{Comportement du modèle (11)-(12) pour $\alpha_0 = 2.7$ et $\theta_c = 1.01$.}
+    \label{fig:comportement_Q2.3.3}
+\end{figure*}
+
+On remarque qu'un comportement périodique amorti se met en place (comportement de $\theta$). Au fur et à mesure que la température diminue, le phénomène de convection thermique se fait moins fort jusqu'au point où la convection est quasiment inexistante et que la diffusion ne suffit pas à évacuer le surplus de chaleur. La réaction se ré-emballe alors et redéclenche de puissants courants convectifs qui suffisent à empêcher l'explosion et font diminuer la température jusqu'à un nouveau minimum local plus élevé que le précédent et pour lequel la convection est également presque nulle. Petit à petit ces phénomènes se font moins forts et s'amortissent. L'amortissement est dû aux pertes thermiques qui s'effectuent au bord.
+
+Dans le cas sans convection, la diffusion est incapable d'amener le surplus d'énergique thermique présente au coeur du réacteur aux bords suffisemment rapidement pour empêcher l'explosion de la réaction.
+
+\subsection{} %2.3.4
+\subsubsection{} %2.3.4.a
+
+De façon générale, on remarque qu'augmenter le paramètre de bifurcation diminue l'amortissement jusqu'à provoquer l'explosion. On remarque également que lorsqu'il y a une oscillation qui se met en place, une période dure environ 30 secondes.	
+
+\begin{enumerate}
+	\item Cas (1.0, 0.01) : dans ce cas la convection est faible. On a un comportement presque parfaitement oscillant pour $\theta_c = 1.045$. Au-delà on diverge (en temps très long), en deça, il semble qu'on arrive à converger également pour des temps très longs (sauf si on diminue franchement $\theta_c$ où là la convergence est plus rapide). Je ne suis pas monter au-delà de $tend = 10000$ secondes cependant.
+	\item Cas (1.0, 1.1) : dans ce cas la convection initale est forte. On a un comportement qui a cependant tendance à faire exploser la température pour  $\theta_c > 1.025$ environ.
+	\item Cas (1.0, 0.5) : c'est le cas intermédiaire au deux précédents. La convergence de la température semble se faire pour $\theta_c > 1.050$. 
+\end{enumerate}
+
+On remarque donc qu'un phénomène de convection intitial trop faible peut être insufissant pour empêcher l'explosion si $\theta_c$ est trop important, mais qu'un phénomène de convection trop important initialement peut également provoqué l'emballement de la réaction. Ainsi, si on traçait la courbe des valeurs de $\theta_c$ à partir desquelles il y a explosion en fonction de la convection initiale on aurait une forme de chaînette dont le minimum se situerait autour de $0.5$ (ou en tout cas entre $0.01$ et $1.1$).
+
+On a déjà expliqué physiquement pourquoi une convection insuffisante permet une explosion de la réaction. Essayons de comprendre pourquoi une convection initiale trop importante pourrait aussi causer une explosion.
+\subsubsection{} %2.3.4.b
+
 
 \end{document}
