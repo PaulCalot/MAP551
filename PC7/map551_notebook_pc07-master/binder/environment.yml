@@ -1,6 +1,0 @@
-name: pc07
-dependencies:
-    - numpy
-    - scipy
-    - bokeh=1.3.*
-    - gfortran_linux-64
