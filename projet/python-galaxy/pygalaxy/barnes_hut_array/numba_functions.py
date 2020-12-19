@@ -124,7 +124,7 @@ def buildTree(center0, box_size0, child, cell_center, cell_radius, particles):
 #     return acc
 
 @numba.njit
-def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p):
+def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p, theta = 0.5):
     depth = 0
     localPos = np.zeros(2*nbodies, dtype=np.int32)
     localNode = np.zeros(2*nbodies, dtype=np.int32)
@@ -146,7 +146,8 @@ def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p):
                     dx = center_of_mass[child, 0] - pos[0]
                     dy = center_of_mass[child, 1] - pos[1]
                     dist = np.sqrt(dx**2 + dy**2)
-                    if dist != 0 and cell_radius[child - nbodies][0]/dist <.5:
+                    print("Theta is {}".format(theta))
+                    if dist != 0 and cell_radius[child - nbodies][0]/dist < theta: # this is the theta
                         Fx, Fy = force(pos, center_of_mass[child], mass[child])
                         acc[0] += Fx
                         acc[1] += Fy

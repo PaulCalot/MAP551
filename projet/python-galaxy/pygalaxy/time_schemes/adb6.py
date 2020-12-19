@@ -2,8 +2,9 @@ import numpy as np
 from .rk4 import RK4
 
 class ADB6: # lien : https://fr.wikipedia.org/wiki/M%C3%A9thodes_d%27Adams-Bashforth
-    def __init__(self, dt, nbodies, method):
+    def __init__(self, dt, nbodies, method, args_method):
         self.dt = dt
+        self.args_method = args_method
         self.method = method
         self.c = [4277.0 / 1440.0,
                  -7923.0 / 1440.0,
@@ -22,7 +23,7 @@ class ADB6: # lien : https://fr.wikipedia.org/wiki/M%C3%A9thodes_d%27Adams-Bashf
             rk4.update(self, mass, particles)
             self.f[i, :] = rk4.k1 
         
-        self.method(mass, particles, self.f[5])
+        self.method(mass, particles, self.f[5], **self.args_method)
 
     def update(self, mass, particles):
         particles[:, :] += self.dt * (self.c[0] * self.f[5] +
@@ -32,5 +33,5 @@ class ADB6: # lien : https://fr.wikipedia.org/wiki/M%C3%A9thodes_d%27Adams-Bashf
                                       self.c[4] * self.f[1] +
                                       self.c[5] * self.f[0])
         self.f = np.roll(self.f, -1, axis=0)
-        self.method(mass, particles, self.f[5]) # method est ici l'énergie (dans le cas de l'example fournit)
+        self.method(mass, particles, self.f[5], **self.args_method) # method est ici l'énergie (dans le cas de l'example fournit)
         # et fait appel à compute_energy(mass, particles, energy) dans le energy.py du barnes_hut_array

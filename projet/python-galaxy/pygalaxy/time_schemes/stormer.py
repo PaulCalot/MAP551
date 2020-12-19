@@ -1,32 +1,34 @@
 import numpy as np
 
 
-def stormer(dt, mass, particles, method, k1):
-        method(mass, particles, k1)
+def stormer(dt, mass, particles, method, k1, args_method):
+        method(mass, particles, k1, **args_method)
         particles[:, 2:] += .5*dt*k1[:, 2:]
         
-        method(mass, particles, k1)
+        method(mass, particles, k1, **args_method)
         particles[:, :2] += dt*k1[:, :2]
 
-        method(mass, particles, k1)
+        method(mass, particles, k1, **args_method)
         particles[:, 2:] += .5*dt*k1[:, 2:]
 
 class Stormer_verlet:
-    def __init__(self, dt, nbodies, method):
+    def __init__(self, dt, nbodies, method,args_method):
         self.dt = dt
         self.method = method
+        self.args_method = args_method
         self.k1 = np.zeros((nbodies, 4))
 
     def init(self, mass, particles):
         pass
 
     def update(self, mass, particles):
-        stormer(self.dt, mass, particles, self.method, self.k1)
+        stormer(self.dt, mass, particles, self.method, self.k1, self.args_method)
 
 class Optimized_815:
-    def __init__(self, dt, nbodies, method):
+    def __init__(self, dt, nbodies, method, args_method):
         self.dt = dt
         self.method = method
+        self.args_method = args_method
         self.k1 = np.zeros((nbodies, 4))
         self.gamma = np.zeros(15)
         self.gamma[0]  =  0.74167036435061295344822780
@@ -50,5 +52,5 @@ class Optimized_815:
 
     def update(self, mass, particles):
         for g in self.gamma:
-            stormer(g*self.dt, mass, particles, self.method, self.k1)
+            stormer(g*self.dt, mass, particles, self.method, self.k1, self.args_method)
 

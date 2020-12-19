@@ -24,38 +24,53 @@ import numpy as np
 import pygalaxy
 from docopt import docopt
 from pygalaxy.barnes_hut_array import compute_energy
+from pygalaxy.naive.energy import compute_energy as compute_energy_naive
 
-
+def get_scheme(scheme):
+    # possibilities : ['RK4', 'ADB6', 'Euler_symplectique','Stormer_verlet','Optimized_815']
+    if scheme == 'RK4':
+        return pygalaxy.RK4
+    elif scheme == 'ADB6':
+        return pygalaxy.ADB6
+    elif scheme == 'Euler_symplectic':
+        return pygalaxy.Euler_symplectic 
+    elif scheme == 'Stormer_verlet':
+        return pygalaxy.Stormer_verlet 
+    elif scheme == 'Optimized_815':
+        return pygalaxy.Optimized_815 
+    else :
+        print("Could not find scheme. Using 'Optimized_815' instead.")
+        return pygalaxy.Optimized_815
+    
 class SolarSystem:
-    def __init__(self, dt=pygalaxy.physics.day_in_sec, display_step=1):
+    def __init__(self, dt=pygalaxy.physics.day_in_sec, display_step=1, scheme = 'Optimized_815', args_method = {'theta':0.5}):
         self.mass, self.particles = pygalaxy.init_solar_system()
         
-        # RK4 et ADB6 sont non symplectique
-        # alors que Euler_symplectique, Stormer_Verlet et Optimized_815 le sont.
-
-            # non symplectique
-        # self.time_method = pygalaxy.RK4(dt, self.particles.shape[0],
-        # compute_energy)
-        # self.time_method = pygalaxy.ADB6(dt, self.particles.shape[0],
-        # compute_energy)
-
-            # symplectique
-        # self.time_method = pygalaxy.Euler_symplectic(dt,
-        # self.particles.shape[0], compute_energy)
-        # self.time_method = pygalaxy.Stormer_verlet(dt, self.particles.shape[0],
-        #                                          compute_energy)
-        self.time_method = pygalaxy.Optimized_815(dt, self.particles.shape[0],
-                                                  compute_energy)
+        self.time_method = get_scheme(scheme)(dt, self.particles.shape[0],
+                                                 compute_energy, args_method)
         self.display_step = display_step
 
-    def next(self):
+    def next(self, return_pos = False):
+        if(return_pos): L = np.zeros((self.display_step,len(self.particles),2))
         for i in range(self.display_step):
             self.time_method.update(self.mass, self.particles)
-
+            if(return_pos):L[i]=self.particles[:,:2]
+        if(return_pos): return L
+        
     def coords(self):
         return self.particles[:, :2]
 
-
+    # useless (other than to compare execution time)
+    def get_energy(self):
+        energy = np.zeros((len(self.particles), 4))
+        compute_energy(self.mass, self.particles,energy)
+        return energy
+    
+    def get_energy_naive(self):
+        energy = np.zeros((len(self.particles), 4))# 4 because 2 positions, 2 speed, per planet.
+        compute_energy_naive(self.mass, self.particles,energy)
+        return energy
+    
 if __name__ == '__main__':
     args = docopt(__doc__)
 
