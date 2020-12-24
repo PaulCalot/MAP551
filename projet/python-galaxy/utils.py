@@ -4,7 +4,7 @@ from pygalaxy.init import getOrbitalVelocity
 mass_sun = pygalaxy.physics.mass_sun
 gamma_si = pygalaxy.physics.gamma_si
 pc_in_m = 3.08567758129e16
-def get_energy_solar(particles,mass, index_sun=0, verbose = True):
+def get_energy_solar(particles, mass, index_sun=0, verbose = True):
     E = 0
     xs,ys, Fx, Fy = particles[index_sun]
     for k in range(len(particles)):

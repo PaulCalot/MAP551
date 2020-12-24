@@ -146,7 +146,7 @@ def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p, the
                     dx = center_of_mass[child, 0] - pos[0]
                     dy = center_of_mass[child, 1] - pos[1]
                     dist = np.sqrt(dx**2 + dy**2)
-                    print("Theta is {}".format(theta))
+                    #print("Theta is {}".format(theta))
                     if dist != 0 and cell_radius[child - nbodies][0]/dist < theta: # this is the theta
                         Fx, Fy = force(pos, center_of_mass[child], mass[child])
                         acc[0] += Fx

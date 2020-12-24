@@ -35,7 +35,7 @@ def compute_energy(mass, particles, energy, theta = 0.5, verbose = False):
 
     if(verbose): print_('\tcompute force: ', end='', flush=True)
     t1 = time.time()    
-    compute_force( root.nbodies, root.child, root.center_of_mass, root.mass, root.cell_radius, particles, energy, theta=theta)
+    compute_force(root.nbodies, root.child, root.center_of_mass, root.mass, root.cell_radius, particles, energy, theta=theta)
     energy[:, :2] = particles[:, 2:]
     t2 = time.time()
     if(verbose): print_('{:9.4f}ms'.format(1000*(t2-t1)))

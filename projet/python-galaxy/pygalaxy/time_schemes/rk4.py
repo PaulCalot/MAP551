@@ -1,7 +1,7 @@
 import numpy as np
 
 class RK4:
-    def __init__(self, dt, nbodies, method,args_method):
+    def __init__(self, dt, nbodies, method, args_method):
         self.dt = dt
         self.method = method
         self.args_method = args_method
