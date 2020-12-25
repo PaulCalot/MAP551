@@ -7,20 +7,20 @@ def init_solar_system():
                        [ -10748e7, 0, 0, -35260], #venus
                        [-147095e6, 0, 0, -30300], #earth
                        [ -20662e7, 0, 0, -26500], #mars
-                    #    [ -74052e7, 0, 0, -13720], #jupiter
-                    #    [-135255e7, 0, 0, -10180], #saturn
-                    #    [ -27413e8, 0, 0,  -7110], #uranus
-                    #    [-444445e7, 0, 0,  -5500], #neptune
+                       [ -74052e7, 0, 0, -13720], #jupiter
+                       [-135255e7, 0, 0, -10180], #saturn
+                       [ -27413e8, 0, 0,  -7110], #uranus
+                       [-444445e7, 0, 0,  -5500], #neptune
                      ])
     mass = np.array([  1.989e30, # sun
                       .33011e24, #mercury
                       4.8675e24, #venus
                        5.972e24, #earth
                       6.4171e23, #mars
-                    #  1898.19e24, #jupiter
-                    #   568.34e24, #saturn
-                    #   86.813e24, #uranus
-                    #  102.413e24, #neptune 
+                     1898.19e24, #jupiter
+                      568.34e24, #saturn
+                      86.813e24, #uranus
+                     102.413e24, #neptune 
                     ])
 
     return mass, bodies

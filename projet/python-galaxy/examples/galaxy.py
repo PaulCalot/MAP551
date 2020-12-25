@@ -58,22 +58,38 @@ def temp2color(temps):
     return colors
 
 
+def get_scheme(scheme):
+    # possibilities : ['RK4', 'ADB6', 'Euler_symplectique','Stormer_verlet','Optimized_815']
+    if scheme == 'RK4':
+        return pygalaxy.RK4
+    elif scheme == 'ADB6':
+        return pygalaxy.ADB6
+    elif scheme == 'Euler_symplectic':
+        return pygalaxy.Euler_symplectic 
+    elif scheme == 'Stormer_verlet':
+        return pygalaxy.Stormer_verlet 
+    elif scheme == 'Optimized_815':
+        return pygalaxy.Optimized_815 
+    else :
+        print("Could not find scheme. Using 'Optimized_815' instead.")
+        return pygalaxy.Optimized_815
+
 class Galaxy:
-    def __init__(self, blackHole, dt=10., display_step=1):
+    def __init__(self, blackHole, dt=10., display_step=1, scheme = 'Optimized_815', args_method = {'theta':0.5}):
         self.mass, self.particles = pygalaxy.init_collisions(blackHole)
-        # self.time_method = pygalaxy.ADB6(dt, self.particles.shape[0], compute_energy)
-        # self.time_method = pygalaxy.Euler_symplectic(dt, self.particles.shape[0], compute_energy)
-        # self.time_method = pygalaxy.Stormer_verlet(dt, self.particles.shape[0], compute_energy)
-        self.time_method = pygalaxy.Optimized_815(
-            dt, self.particles.shape[0], compute_energy)
+
+        self.time_method = get_scheme(scheme)(dt, self.particles.shape[0],
+                                        compute_energy, args_method)
         self.display_step = display_step
         self.it = 0
 
-    def next(self):
+    def next(self, return_pos = False):
+        if(return_pos): L = np.zeros((self.display_step,len(self.particles),2))
         for i in range(self.display_step):
             self.it += 1
-            print(self.it)
             self.time_method.update(self.mass, self.particles)
+            if(return_pos):L[i]=self.particles[:,:2]
+        if(return_pos): return L
 
     def coords(self):
         return self.particles[:, :2]
