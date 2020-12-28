@@ -82,18 +82,19 @@ class Galaxy:
         self.time_method = get_scheme(scheme)(dt, self.particles.shape[0],
                                         compute_energy, args_method)
         self.display_step = display_step
-        self.it = 0
 
     def next(self, return_pos = False):
-        if(return_pos): L = np.zeros((self.display_step,len(self.particles),2))
+        if(return_pos): L = np.zeros((self.display_step,len(self.particles),4))
         for i in range(self.display_step):
-            self.it += 1
             self.time_method.update(self.mass, self.particles)
-            if(return_pos):L[i]=self.particles[:,:2]
+            if(return_pos):L[i]=self.particles
         if(return_pos): return L
 
     def coords(self):
         return self.particles[:, :2]
+
+    def get_count(self):
+        return self.time_method.count
 
     def colors(self):
         speed_magnitude = np.linalg.norm(self.particles[:, 2:4], axis=1)

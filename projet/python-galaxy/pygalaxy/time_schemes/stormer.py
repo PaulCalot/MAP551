@@ -17,13 +17,15 @@ class Stormer_verlet:
         self.method = method
         self.args_method = args_method
         self.k1 = np.zeros((nbodies, 4))
+        self.count = 0
 
     def init(self, mass, particles):
         pass
 
     def update(self, mass, particles):
         stormer(self.dt, mass, particles, self.method, self.k1, self.args_method)
-
+        self.count += 3
+        
 class Optimized_815:
     def __init__(self, dt, nbodies, method, args_method):
         self.dt = dt
@@ -53,4 +55,4 @@ class Optimized_815:
     def update(self, mass, particles):
         for g in self.gamma:
             stormer(g*self.dt, mass, particles, self.method, self.k1, self.args_method)
-
+            self.count += 3

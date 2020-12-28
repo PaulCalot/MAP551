@@ -10,6 +10,7 @@ class RK4:
         self.k3 = np.zeros((nbodies, 4)) 
         self.k4 = np.zeros((nbodies, 4)) 
         self.tmp = np.zeros((nbodies, 4))
+        self.count = 0
 
     def init(self, mass, particles):
         pass
@@ -31,3 +32,5 @@ class RK4:
         self.method(mass, self.tmp, self.k4, **self.args_method)
 
         particles[:, :] += self.dt/6*(self.k1 + 2*(self.k2+self.k3) + self.k4)
+
+        self.count+=4

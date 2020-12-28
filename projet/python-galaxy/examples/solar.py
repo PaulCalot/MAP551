@@ -53,26 +53,18 @@ class SolarSystem:
         self.display_step = display_step
 
     def next(self, return_pos = False):
-        if(return_pos): L = np.zeros((self.display_step,len(self.particles),2))
+        if(return_pos): L = np.zeros((self.display_step,len(self.particles),4))
         for i in range(self.display_step):
             self.time_method.update(self.mass, self.particles)
-            if(return_pos):L[i]=self.particles[:,:2]
-        if(return_pos): return L
+            if(return_pos):L[i]=self.particles 
+        if(return_pos): return L #  [nb de pas x nb de planètes x 4]
         
     def coords(self):
         return self.particles[:, :2]
 
-    # useless (other than to compare execution time)
-    def get_energy(self):
-        energy = np.zeros((len(self.particles), 4))
-        compute_energy(self.mass, self.particles,energy)
-        return energy
-    
-    def get_energy_naive(self):
-        energy = np.zeros((len(self.particles), 4))# 4 because 2 positions, 2 speed, per planet.
-        compute_energy_naive(self.mass, self.particles,energy)
-        return energy
-    
+    def get_count(self):
+        return self.time_method.count
+
 if __name__ == '__main__':
     args = docopt(__doc__)
 

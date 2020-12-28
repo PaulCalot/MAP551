@@ -49,7 +49,7 @@ def init_collisions(blackHole):
     mass = np.empty(npart)
 
     ind = 0
-    for ib, b in enumerate(blackHole):
+    for ib, b in enumerate(blackHole): 
         particles[ind, :2] = b['coord']
         mass[ind] = b['mass']
 

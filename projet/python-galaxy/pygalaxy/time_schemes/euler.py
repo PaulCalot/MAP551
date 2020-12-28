@@ -6,12 +6,14 @@ class Euler:
         self.method = method
         self.args_method = args_method
         self.k1 = np.zeros((nbodies, 4))
+        self.count = 0
 
     def init(self, mass, particles):
         pass
 
     def update(self, mass, particles):
         self.method(mass, particles, self.k1, **self.args_method) # dict
+        self.count += 1
         particles[:, :] += self.dt*self.k1
 
 class Euler_symplectic:
@@ -20,7 +22,7 @@ class Euler_symplectic:
         self.method = method
         self.args_method = args_method
         self.k1 = np.zeros((nbodies, 4))
-
+        self.count = 0
     def init(self, mass, particles):
         pass
 
@@ -29,3 +31,4 @@ class Euler_symplectic:
         particles[:, :2] += self.dt*self.k1[:, :2]
         self.method(mass, particles, self.k1, **self.args_method)
         particles[:, 2:] += self.dt*self.k1[:, 2:]
+        self.count += 2
