@@ -11,7 +11,7 @@ class Euler:
         pass
 
     def update(self, mass, particles):
-        self.method(mass, particles, self.k1, *self.args_method) # dict
+        self.method(mass, particles, self.k1, **self.args_method) # dict
         particles[:, :] += self.dt*self.k1
 
 class Euler_symplectic:

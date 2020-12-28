@@ -57,13 +57,14 @@ def temp2color(temps):
 
     return colors
 
-
 def get_scheme(scheme):
-    # possibilities : ['RK4', 'ADB6', 'Euler_symplectique','Stormer_verlet','Optimized_815']
+    # possibilities : ['RK4', 'ADB6', 'Euler', 'Euler_symplectique','Stormer_verlet','Optimized_815']
     if scheme == 'RK4':
         return pygalaxy.RK4
     elif scheme == 'ADB6':
         return pygalaxy.ADB6
+    elif scheme == 'Euler' : 
+        return pygalaxy.Euler
     elif scheme == 'Euler_symplectic':
         return pygalaxy.Euler_symplectic 
     elif scheme == 'Stormer_verlet':
