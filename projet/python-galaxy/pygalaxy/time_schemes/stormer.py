@@ -48,7 +48,8 @@ class Optimized_815:
         self.gamma[12] = self.gamma[2]
         self.gamma[13] = self.gamma[1]
         self.gamma[14] = self.gamma[0]
-
+        self.count = 0
+        
     def init(self, mass, particles):
         pass
 
