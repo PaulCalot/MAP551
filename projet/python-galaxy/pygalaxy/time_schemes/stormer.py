@@ -2,14 +2,16 @@ import numpy as np
 
 
 def stormer(dt, mass, particles, method, k1, args_method):
-        method(mass, particles, k1, **args_method)
+        count1 = method(mass, particles, k1, **args_method)
         particles[:, 2:] += .5*dt*k1[:, 2:]
         
-        method(mass, particles, k1, **args_method)
+        count2 = method(mass, particles, k1, **args_method)
         particles[:, :2] += dt*k1[:, :2]
 
-        method(mass, particles, k1, **args_method)
+        count3 = method(mass, particles, k1, **args_method)
         particles[:, 2:] += .5*dt*k1[:, 2:]
+        
+        return count1+count2+count3
 
 class Stormer_verlet:
     def __init__(self, dt, nbodies, method,args_method):
@@ -18,12 +20,13 @@ class Stormer_verlet:
         self.args_method = args_method
         self.k1 = np.zeros((nbodies, 4))
         self.count = 0
+        self.count_eval_force = 0
 
     def init(self, mass, particles):
         pass
 
     def update(self, mass, particles):
-        stormer(self.dt, mass, particles, self.method, self.k1, self.args_method)
+        self.count_eval_force +=stormer(self.dt, mass, particles, self.method, self.k1, self.args_method)
         self.count += 3
         
 class Optimized_815:
@@ -49,11 +52,13 @@ class Optimized_815:
         self.gamma[13] = self.gamma[1]
         self.gamma[14] = self.gamma[0]
         self.count = 0
+        self.count_eval_force = 0
+
         
     def init(self, mass, particles):
         pass
 
     def update(self, mass, particles):
         for g in self.gamma:
-            stormer(g*self.dt, mass, particles, self.method, self.k1, self.args_method)
+            self.count_eval_force += stormer(g*self.dt, mass, particles, self.method, self.k1, self.args_method)
             self.count += 3

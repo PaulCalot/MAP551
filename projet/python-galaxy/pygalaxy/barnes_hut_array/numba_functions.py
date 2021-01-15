@@ -132,7 +132,8 @@ def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p, the
 
     pos = p[:2]
     acc = np.zeros(2)
-
+    
+    count = 0
     while depth >= 0:
         while localPos[depth] < 4:
             child = child_array[localNode[depth] + localPos[depth]]
@@ -140,6 +141,7 @@ def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p, the
             if child >= 0:
                 if child < nbodies:
                     Fx, Fy = force(pos, center_of_mass[child], mass[child])
+                    count+=1
                     acc[0] += Fx
                     acc[1] += Fy
                 else:
@@ -149,6 +151,7 @@ def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p, the
                     #print("Theta is {}".format(theta))
                     if dist != 0 and cell_radius[child - nbodies][0]/dist < theta: # this is the theta
                         Fx, Fy = force(pos, center_of_mass[child], mass[child])
+                        count+=1
                         acc[0] += Fx
                         acc[1] += Fy
                     else:
@@ -156,7 +159,7 @@ def computeForce(nbodies, child_array, center_of_mass, mass, cell_radius, p, the
                         localNode[depth] = nbodies + 4*(child-nbodies)
                         localPos[depth] = 0
         depth -= 1
-    return acc
+    return acc, count
 
 @numba.njit
 def computeMassDistribution(nbodies, ncell, child, mass, center_of_mass ):

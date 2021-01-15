@@ -34,7 +34,7 @@ class Plot:
     fontsize_legend = '11pt'
     fontsize_major_tick = '11pt'
 
-    def __init__(self, positions, masses, scheme_names, dt_in_days, theta, fn_evaluations, names = None):
+    def __init__(self, positions, masses, scheme_names, dt_in_days, theta, fn_evaluations, names = None, positions_ref = None):
         """ Initialize a plotter by also computing the evolution of energy per body and per schemes and the total energy of the system.
         Various plotting function can be used afterwards to plot : evolution of the system, energy evolutions of the system (per scheme, per body, total energy).
 
@@ -72,7 +72,9 @@ class Plot:
         # init : we compute various data such as the energy etc.
         self.energy_per_body = self._compute_energy() # contains energy ordered by schemes, then body then time step
         self.energy_sum = self._compute_sum_energy() # contains energy ordered by schemes then time step.
-
+        
+        self.positions_ref = [np.array(position) for position in positions_ref] if type(positions_ref)==list else [positions_ref]*len(self.positions)
+        
         # name of simulation with their parameters
         self.simu_names = ["{} ; dt = {} days ; theta = {}".format(s, dt, t) \
             for s,dt,t in zip(self.schemes, self.dt_in_days, self.theta_list)]
@@ -120,7 +122,7 @@ class Plot:
                 if(type(idx_ref) == int and idx_ref < len(self.schemes)):
                     pos = np.moveaxis(self.positions[idx_ref], 0, -1)  # [nb_planets,4,nb_steps]
                     for body_idx in range(self.number_of_bodies):
-                        fig.line(x=pos[body_idx][0],y=pos[body_idx][1], color = 'black', line_width=1.5, line_alpha=1)
+                        fig.line(x=pos[body_idx][0],y=pos[body_idx][1], color = 'black', line_width=0.5, line_alpha=1)
                 self.set_default_fig(fig)
                 if(type(ncols)==int):
                     grid.append(fig)
@@ -201,7 +203,7 @@ class Plot:
             grid = []
             for scheme in range(len(self.schemes)): # len(self.schemes) graph
                 times = np.linspace(0, self.number_of_steps[scheme]*self.dt_in_days[scheme], self.number_of_steps[scheme])
-                title = "{} ; dt = {} days".format(self.schemes[scheme], self.dt_in_days[scheme])
+                title = self.simu_names[scheme]
                 fig = figure(plot_width=980, plot_height=500, match_aspect=False, title=title, \
                     y_axis_label='Fractional change in Energy (%)', x_axis_label='Time (days)')                
                 colors = itertools.cycle(palette)
@@ -245,7 +247,7 @@ class Plot:
         for idx_scheme in range(len(self.schemes)):
             if(not idx_scheme in excluded_idx):
                 times = np.linspace(0, self.number_of_steps[idx_scheme]*self.dt_in_days[idx_scheme], self.number_of_steps[idx_scheme])
-                label = "{} ; dt = {} days".format(self.schemes[idx_scheme], self.dt_in_days[idx_scheme])
+                label = self.simu_names[idx_scheme]
                 fig.line(times, 100*(energy[idx_scheme]-energy[idx_scheme][0])/energy[idx_scheme][0], \
                     color = next(colors), legend_label=label, line_width=2, line_alpha=1)
         
@@ -253,15 +255,18 @@ class Plot:
             fig.legend.visible = False
         else:
             fig.legend.click_policy="hide"
-            fig.add_layout(fig.legend[0], 'right')
+            fig.legend.location = "bottom_left"       
+            #fig.add_layout(fig.legend[0], 'right')
         self.set_default_fig(fig)
         show(fig)
 
-    def plot_fn_eval(self, use_log_axis = False, save_fig = False):
+    def plot_fn_eval(self, use_log_axis = False, idx_ref = None, save_fig = False):
         plt.rcParams['font.size'] = 15
         fig, ax = plt.subplots(figsize=(15,10))
-        labels = ["{} ; dt = {} days".format(self.schemes[k], self.dt_in_days[k]) for k in range(len(self.schemes))] 
-        ax.bar(labels, self.fn_evaluations, log = use_log_axis)
+        labels = ["theta = {}".format(self.theta_list[k]) for k in range(len(self.schemes)) if k!= idx_ref] 
+        fn_evaluations = self.fn_evaluations if type(idx_ref)!=type(1) else [eval for k, eval in enumerate(self.fn_evaluations) if k!= idx_ref]
+        print(fn_evaluations)
+        ax.bar(labels, fn_evaluations, log = use_log_axis)
         ax.set_title('Number of function evaluations')
         if(save_fig):
             plt.savefig('fn_eval.png', dpi = 300)
@@ -282,7 +287,7 @@ class Plot:
             
             fig = figure(plot_height=500, match_aspect=True, title="Pie chart of the energy - {}".format(self.simu_names[idx_scheme]),\
                 tooltips="@planet: @angle", x_range=(-0.5, 0.5))
-                # toolbar_location='right', tools="hover" 
+                 # toolbar_location='right', tools="hover" 
             fig.wedge(x=0, y=1, radius=0.40, start_angle=cumsum('angle', include_zero=True), end_angle=cumsum('angle'), \
                 line_color="white", fill_color='color', legend_field='planet', source=data)
 
@@ -293,8 +298,40 @@ class Plot:
             fig.grid.grid_line_color = None
 
             show(fig)
-        
+    
+    def plot_quadratic_positions_error(self, idx_ref = None): # idx_ref won't be plotted
+        fig = figure(plot_width=980, plot_height=500, match_aspect=False, \
+            title="Quadratic error as a function of time for each scheme.", y_axis_label='mean quadratic error', x_axis_label='t')
+        colors = itertools.cycle(palette)
+        for k, pos_ in enumerate(self.positions):
+            if(k != idx_ref):
+                times = np.linspace(0, self.number_of_steps[k]*self.dt_in_days[k], self.number_of_steps[k])
+                c = next(colors)
+                pos = np.moveaxis(pos_, 0, -1)  # [nb_planets,4,nb_steps]
+                pos_ref = np.moveaxis(self.positions_ref[k], 0, -1)
+                dpos = pos - pos_ref
+                dpos = dpos[:,:2,:]
+                error = np.zeros(times.shape)
+                for time_step in range(self.number_of_steps[k]):
+                    fixed_dt_error = 0
+                    for body_idx in range(self.number_of_bodies):
+                        fixed_dt_error += np.linalg.norm(dpos[body_idx,:,time_step])
+                    error[time_step] += fixed_dt_error/self.number_of_bodies
+                fig.line(x=times,y=error, color = c, line_width=1.5, line_alpha=1, legend_label = self.simu_names[k])
+        fig.legend.click_policy="hide"
+        fig.legend.location = "top_left"       
+         #fig.add_layout(fig.legend[0], 'right')
+        self.set_default_fig(fig)
+        show(fig)
+
     # ----------------- Useful for init ------------------ #
+    def _compute_energy(self, idx_ref): # idx_ref is the quasi-exact solution
+        assert(type(idx_ref) == 0 and idx_ref>=0 and idx_ref<len(self.schemes))
+        relative_energy_per_body = [np.zeros((self.number_of_bodies,self.number_of_steps[k])) for k in range(len(self.schemes))]
+        ref_energy = self.energy_per_body[idx_ref]
+        for k, pos in enumerate(self.positions):
+            relative_energy_per_body[k] = self.energy_per_body[k] - ref_energy
+        return relative_energy_per_body
 
     def _compute_energy(self):
         energy_per_body = [np.zeros((self.number_of_bodies,self.number_of_steps[k])) for k in range(len(self.schemes))]

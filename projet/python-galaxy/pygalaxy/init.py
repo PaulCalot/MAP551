@@ -22,7 +22,16 @@ def init_solar_system():
                       86.813e24, #uranus
                      102.413e24, #neptune 
                     ])
-
+    # bodies-=np.array([[        1e10, 1e10, 0,      0], #sun
+    #                    [    1e10, 1e10, 0, 0], #mercury
+    #                    [ 1e10, 1e10, 0, 0], #venus
+    #                    [1e10, 1e10, 0, 0], #earth
+    #                    [ 1e10, 1e10, 0, 0], #mars
+    #                    [ 1e10, 1e10, 0, 0], #jupiter
+    #                    [1e10, 1e10, 0, 0], #saturn
+    #                    [ 1e10, 1e10, 0,  0], #uranus
+    #                    [1e10, 1e10, 0,  0], #neptune
+    #                  ])
     return mass, bodies
 
 def getOrbitalVelocity(xb, yb, mb, xs, ys):

@@ -9,10 +9,13 @@ import numba
 
 @numba.njit(parallel=True)
 def compute_force( nbodies, child, center_of_mass, mass, cell_radius, particles, energy, theta = 0.5):
+    count = 0
     for i in numba.prange(particles.shape[0]):
-        acc = numba_functions.computeForce(nbodies, child, center_of_mass, mass, cell_radius, particles[i], theta=theta)
+        acc, count_ = numba_functions.computeForce(nbodies, child, center_of_mass, mass, cell_radius, particles[i], theta=theta)
         energy[i, 2] = acc[0]
         energy[i, 3] = acc[1]
+        count+=count_
+    return count
 
 def compute_energy(mass, particles, energy, theta = 0.5, verbose = False):
     if(verbose): print('compute energy:')
@@ -35,9 +38,10 @@ def compute_energy(mass, particles, energy, theta = 0.5, verbose = False):
 
     if(verbose): print_('\tcompute force: ', end='', flush=True)
     t1 = time.time()
-    compute_force(root.nbodies, root.child, root.center_of_mass, root.mass, root.cell_radius, particles, energy, theta=theta)
+    count = compute_force(root.nbodies, root.child, root.center_of_mass, root.mass, root.cell_radius, particles, energy, theta=theta)
     energy[:, :2] = particles[:, 2:] # useless...
     t2 = time.time()
     if(verbose): print_('{:9.4f}ms'.format(1000*(t2-t1)))
 
     if(verbose): print_('\ttotal:       {:11.4f}ms'.format(1000*(time.time()-t_tot)))
+    return count

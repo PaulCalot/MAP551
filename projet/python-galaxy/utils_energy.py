@@ -17,7 +17,6 @@ def get_center_of_mass(particles, masses): # useless
     return X/M, Y/M
 
 def get_energy_solar(particles, masses, verbose = True):
-    
     # Kinetic Energy
     KE = 0
     for k in range(len(particles)):
@@ -28,15 +27,14 @@ def get_energy_solar(particles, masses, verbose = True):
     # Gravitational potential energy GPE
     GPE = 0
     for i in range(len(particles)):
-        for j in range(len(particles)):
-            if(i!=j):
-                mass_i = masses[i]
-                mass_j = masses[j]
-                xi, yi = particles[i][0], particles[i][1]
-                xj, yj = particles[j][0], particles[j][1]
-                rij = np.sqrt((xi-xj)*(xi-xj)+(yi-yj)*(yi-yj))
-                GPE-= gamma_si*mass_i*mass_j/(rij) 
-    return KE+GPE
+        for j in range(i):
+            mass_i = masses[i]
+            mass_j = masses[j]
+            xi, yi = particles[i][0], particles[i][1]
+            xj, yj = particles[j][0], particles[j][1]
+            rij = np.sqrt((xi-xj)*(xi-xj)+(yi-yj)*(yi-yj))
+            GPE+= mass_i*mass_j/(rij) 
+    return KE-gamma_si*GPE
     
 def get_energy_planet(particles, masses, planet_index, verbose = True):
     # Kinetic Energy
@@ -53,6 +51,6 @@ def get_energy_planet(particles, masses, planet_index, verbose = True):
             xi, yi = particles[i][0], particles[i][1]
             xj, yj = particles[planet_index][0], particles[planet_index][1]
             rij = np.sqrt((xi-xj)*(xi-xj)+(yi-yj)*(yi-yj))
-            GPE-= gamma_si*mass_i*mass_j/(rij)
+            GPE+= mass_i*mass_j/(rij)
                 
-    return KE+GPE
+    return KE-gamma_si*0.5*GPE

@@ -47,7 +47,6 @@ def get_scheme(scheme):
 class SolarSystem:
     def __init__(self, dt=pygalaxy.physics.day_in_sec, display_step=1, scheme = 'Optimized_815', args_method = {'theta':0.5}):
         self.mass, self.particles = pygalaxy.init_solar_system()
-        
         self.time_method = get_scheme(scheme)(dt, self.particles.shape[0],
                                                  compute_energy, args_method)
         self.display_step = display_step
@@ -64,6 +63,9 @@ class SolarSystem:
 
     def get_count(self):
         return self.time_method.count
+
+    def get_count_force_eval(self):
+        return self.time_method.count_eval_force
 
 if __name__ == '__main__':
     args = docopt(__doc__)
